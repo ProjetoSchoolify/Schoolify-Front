@@ -19,18 +19,21 @@ public class SugestaoLivroController {
     @Autowired
     private SugestaoLivroService service;
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping(value = "/{id}")
     public ResponseEntity<SugestaoLivroDTO> findById(@PathVariable Long id) {
         SugestaoLivroDTO dto = service.findById(id);
         return ResponseEntity.ok(dto);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping
     public ResponseEntity<Page<SugestaoLivroDTO>> findAll(Pageable pageable) {
         Page<SugestaoLivroDTO> dto = service.findAll(pageable);
         return ResponseEntity.ok(dto);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
     public ResponseEntity<SugestaoLivroDTO> insert(@Valid @RequestBody SugestaoLivroDTO dto) {
         dto = service.insert(dto);
@@ -39,12 +42,16 @@ public class SugestaoLivroController {
         return ResponseEntity.created(uri).body(dto);
     }
 
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PutMapping(value = "/{id}")
     public ResponseEntity<SugestaoLivroDTO> update(@PathVariable Long id, @Valid @RequestBody SugestaoLivroDTO dto) {
         dto = service.update(id, dto);
         return ResponseEntity.ok(dto);
     }
 
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);

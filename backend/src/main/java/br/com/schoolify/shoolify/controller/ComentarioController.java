@@ -19,18 +19,21 @@ public class ComentarioController {
     @Autowired
     private ComentarioService service;
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping(value = "/{id}")
     public ResponseEntity<ComentarioDTO> findById(@PathVariable Long id) {
         ComentarioDTO dto = service.findById(id);
         return ResponseEntity.ok(dto);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping
     public ResponseEntity<Page<ComentarioDTO>> findAll(Pageable pageable) {
         Page<ComentarioDTO> dto = service.findAll(pageable);
         return ResponseEntity.ok(dto);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
     public ResponseEntity<ComentarioDTO> insert(@Valid @RequestBody ComentarioDTO dto) {
         dto = service.insert(dto);
@@ -39,12 +42,14 @@ public class ComentarioController {
         return ResponseEntity.created(uri).body(dto);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PutMapping(value = "/{id}")
     public ResponseEntity<ComentarioDTO> update(@PathVariable Long id, @Valid @RequestBody ComentarioDTO dto) {
         dto = service.update(id, dto);
         return ResponseEntity.ok(dto);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);

@@ -19,18 +19,21 @@ public class DisciplinaController {
     @Autowired
     private DisciplinaService service;
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping(value = "/{id}")
     public ResponseEntity<DisciplinaDTO> findById(@PathVariable Long id) {
         DisciplinaDTO dto = service.findById(id);
         return ResponseEntity.ok(dto);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping
     public ResponseEntity<Page<DisciplinaDTO>> findAll(Pageable pageable) {
         Page<DisciplinaDTO> dto = service.findAll(pageable);
         return ResponseEntity.ok(dto);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
     public ResponseEntity<DisciplinaDTO> insert(@Valid @RequestBody DisciplinaDTO dto) {
         dto = service.insert(dto);
@@ -39,12 +42,14 @@ public class DisciplinaController {
         return ResponseEntity.created(uri).body(dto);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PutMapping(value = "/{id}")
     public ResponseEntity<DisciplinaDTO> update(@PathVariable Long id, @Valid @RequestBody DisciplinaDTO dto) {
         dto = service.update(id, dto);
         return ResponseEntity.ok(dto);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);

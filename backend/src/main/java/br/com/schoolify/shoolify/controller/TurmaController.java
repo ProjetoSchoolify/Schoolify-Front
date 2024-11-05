@@ -20,18 +20,21 @@ public class TurmaController {
     @Autowired
     private TurmaService service;
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping(value = "/{id}")
     public ResponseEntity<TurmaDTO> findById(@PathVariable Long id) {
         TurmaDTO dto = service.findById(id);
         return ResponseEntity.ok(dto);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping
     public ResponseEntity<Page<TurmaDTO>> findAll(Pageable pageable) {
         Page<TurmaDTO> dto = service.findAll(pageable);
         return ResponseEntity.ok(dto);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
     public ResponseEntity<TurmaDTO> insert(@Valid @RequestBody TurmaDTO dto) {
         dto = service.insert(dto);
@@ -40,12 +43,14 @@ public class TurmaController {
         return ResponseEntity.created(uri).body(dto);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PutMapping(value = "/{id}")
     public ResponseEntity<TurmaDTO> update(@PathVariable Long id, @Valid @RequestBody TurmaDTO dto) {
         dto = service.update(id, dto);
         return ResponseEntity.ok(dto);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
