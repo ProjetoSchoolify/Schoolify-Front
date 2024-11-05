@@ -1,14 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import styles from "@/styles/Cruds.module.css";
 import { faUserGraduate, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function CrudUsuario() {
-    const [usuarios, setUsuarios] = useState([
-        { id: 1, nome: "João Silva", email: "joao.silva@example.com", telefone: "123456789", turma: "1º ano" },
-        { id: 2, nome: "Maria Oliveira", email: "maria.oliveira@example.com", telefone: "987654321", turma: "2º ano" }
-    ]);
-
+    const [usuarios, setUsuarios] = useState([]);
     const [nomeResponsavel, setNomeResponsavel] = useState("");
     const [email, setEmail] = useState("");
     const [telefone, setTelefone] = useState("");
@@ -17,50 +14,72 @@ export default function CrudUsuario() {
     const [turma, setTurma] = useState("");
     const [editandoId, setEditandoId] = useState(null);
 
-    const handleSubmit = (e) => {
+    useEffect(() => {
+        fetchUsuario();
+    }, []);
+
+    const fetchUsuario = async () => {
+        try {
+            const response = await axios.get("http://localhost:8080/usuarios");
+            setUsuarios(response.data.content);
+        } catch (error) {
+            console.error("Erro ao buscar usuários", error);
+        }
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (nomeResponsavel.trim() === "" || email.trim() === "" || telefone.trim() === "" || senha !== confirmarSenha || turma.trim() === "") {
             alert("Preencha todos os campos corretamente e confirme a senha.");
             return;
         }
 
-        if (editandoId !== null) {
-            setUsuarios(usuarios.map(usuario =>
-                usuario.id === editandoId ? { ...usuario, nome: nomeResponsavel, email, telefone, turma } : usuario
-            ));
+        const novoUsuario = {
+            nome: nomeResponsavel,
+            email,
+            telefone,
+            turma,
+            senha
+        };
 
+        try {
+            if (editandoId !== null) {
+                await axios.put(`http://localhost:8080/usuarios/${editandoId}`, novoUsuario);
+            } else {
+                await axios.post("http://localhost:8080/usuarios", novoUsuario);
+            }
+
+            setNomeResponsavel("");
+            setEmail("");
+            setTelefone("");
+            setSenha("");
+            setConfirmarSenha("");
+            setTurma("");
             setEditandoId(null);
-        } else {
-            const novoUsuario = {
-                id: usuarios.length + 1,
-                nome: nomeResponsavel,
-                email,
-                telefone,
-                turma
-            };
-
-            setUsuarios([...usuarios, novoUsuario]);
+            fetchUsuario();
+        } catch (error) {
+            console.error("Erro ao salvar usuário:", error);
         }
+    };
 
-        setNomeResponsavel("");
-        setEmail("");
-        setTelefone("");
-        setSenha("");
-        setConfirmarSenha("");
-        setTurma("");
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`http://localhost:8080/usuarios/${id}`);
+            setUsuarios(usuarios.filter(usuario => usuario.id !== id));
+        } catch (error) {
+            console.error("Erro ao deletar usuário:", error);
+        }
     };
 
     const handleEdit = (id) => {
-        const usuario = usuarios.find(u => u.id === id);
+        const usuario = usuarios.find(usuario => usuario.id === id);
+        setEditandoId(id);
         setNomeResponsavel(usuario.nome);
         setEmail(usuario.email);
         setTelefone(usuario.telefone);
         setTurma(usuario.turma);
-        setEditandoId(id);
-    };
-
-    const handleDelete = (id) => {
-        setUsuarios(usuarios.filter(usuario => usuario.id !== id));
+        setSenha("");
+        setConfirmarSenha("");
     };
 
     return (
@@ -166,5 +185,3 @@ export default function CrudUsuario() {
         </div>
     );
 }
-
-
